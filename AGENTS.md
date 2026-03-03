@@ -7,21 +7,20 @@
 - Write detailed specs upfront to reduce ambiguity
 
 ### 2. Multi Agent Strategy
-- Route all non-trivial multi-agent work through the `leader` agent first
-- The main agent must not directly orchestrate multiple subagents unless failure recovery requires it
-- Use `leader` to decompose tasks, assign one tack per subagent, and manage parallel execution
-- Offload research, exploration, and focused analysis to specialized subagents via `leader`
-- Keep the main context window clean: main agent handles user alignment and final synthesis only
-- For complex problems, increase parallelism through `leader` with clear acceptance criteria per subtask
+- Use `task` with supported agents directly (`explore`, `librarian`, `oracle`, `metis`, `momus`)
+- Run independent searches and checks in parallel background tasks
+- Keep prompts explicit: task, expected outcome, tool constraints, and context
+- Keep the main context window clean: main agent handles user alignment and final synthesis
+- For complex problems, increase parallelism with clear acceptance criteria per subtask
 
 ### 3. Self-Improvement Loop
-- After ANY correction from the user: save a lesson through the `memory-manager` skill
+- After ANY correction from the user: save a lesson through the `memories` skill
 - Write rules for yourself that prevent the same mistake
 - Ruthlessly iterate on these lessons until mistake rate drops
 - At session start, load memory index first and fetch details only for relevant lessons
 
 ### 3.1 Lessons Scope and Priority
-- Use `memory-manager` skill as the only interface for memory load/save/manage.
+- Use `memories` skill as the only interface for memory load/save/manage.
 - Do not read/write memory DB or lesson files directly unless migration/recovery requires it.
 - Session-start rule:
 - At the beginning of a session, use the skill to load index rows first (`title/summary/keywords` only).
@@ -57,15 +56,14 @@
 2. **Verify Plan**: Check in before starting implementation
 3. **Track Progress**: Mark items complete as you go
 4. **Explain Changes**: High-level summary at each step
-5. **Document Results**: Add review section to `<project_root>/tasks/todo.md`
-6. **Capture Lessons**: Save lessons through `memory-manager` skill after corrections
+5. **Document Results**: Add review section to `<project_root>/.taptik/tasks/todo.md`
+6. **Capture Lessons**: Save lessons through `memories` skill after corrections
 7. **Skill-First Memory Operations**:
    - At session start, load memory through `memories` index-first, then lazy detail fetch.
    - On explicit memory commands (`기억해`, `외워둬`, `메모리에 저장`, `저장해`), always write via `memories`.
    - Scope mapping: global command -> global scope, project command -> project scope, unspecified -> project scope.
    - Search order in project context: project -> global.
-8. **Close Todo**: After finishing a feature, delete completed todo entries in `<project_root>/tasks/todo.md` to optimize token usage and keep only actionable items.
-9. **Skill Symlink Portability**: Keep skill links as absolute symlinks, and manage/rebuild them via `skills/bootstrap-links.sh` + `skills/links.manifest` for cross-machine portability.
+8. **Close Todo**: After finishing a feature, delete completed todo entries in `<project_root>/.taptik/tasks/todo.md` to optimize token usage and keep only actionable items.
 
 ## Core Principles
 
