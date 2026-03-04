@@ -1,5 +1,0 @@
-name: sample-agent
-version: 0.1.0
-description: Portable sample agent for labs
-input_schema: shared/schemas/input.json
-output_schema: shared/schemas/output.json

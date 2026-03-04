@@ -1,0 +1,9 @@
+{
+  "name": "memory-manager-plugin",
+  "version": "1.0.0",
+  "description": "OpenCode plugin for memory management with session hooks",
+  "main": "plugins/memory-manager.ts",
+  "dependencies": {
+    "@opencode-ai/plugin": "latest"
+  }
+}
