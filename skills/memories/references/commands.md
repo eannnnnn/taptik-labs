@@ -10,6 +10,28 @@
 - For load-only tasks, keep command budget to 2-4 commands.
 - Avoid `obsidian --help` and `obsidian vaults` during normal retrieval.
 
+## Slash-style entrypoint
+
+Use `/memories init` as the default skill-facing bootstrap.
+
+Supported forms:
+
+- `/memories init`
+- `/memories init <project_name>`
+- `/memories init project=<name> vault=<vault> status=<valid|invalid>`
+
+Equivalent script invocation:
+
+```bash
+bash scripts/init.sh --project "<name>" --vault "<vault>" --status "valid"
+```
+
+If no project is passed, `init.sh` auto-detects project as:
+
+1. `basename "$OPENCODE_PROJECT_DIR"` (if set)
+2. `basename "$(git rev-parse --show-toplevel)"`
+3. `basename "$PWD"`
+
 ## Global fast path
 
 ```bash
@@ -25,6 +47,18 @@ bash scripts/search.sh "[status:valid]"
 bash scripts/search.sh "tag:#memories"
 obsidian read path="memories/<selected-note>.md"
 ```
+
+## Init bootstrap script
+
+```bash
+bash scripts/init.sh
+```
+
+Output is JSON with:
+
+- `project_paths`
+- `global_paths`
+- `ordered_paths` (project-first then global, deduped)
 
 ## Save patterns
 

@@ -20,6 +20,15 @@ obsidian read path="memories/<selected-note>.md"
 
 In project context, prioritize `[project:<name>]` results before broader tag queries.
 
+For slash-style bootstrap (`/memories init`), use:
+
+```bash
+bash scripts/init.sh
+```
+
+This runs project + global memory discovery and returns project-first paths.
+Project is auto-detected from `OPENCODE_PROJECT_DIR`, then git root, then current directory.
+
 ## Safe Write Pattern
 
 Use one write at a time and follow `templates/memory-note-template.md` frontmatter (`name/project/tags/status`).

@@ -22,6 +22,25 @@ obsidian read path="memories/<selected-note>.md"
 obsidian create path="memories/<date>-<slug>.md" content="<follow templates/memory-note-template.md>" overwrite
 ```
 
+## Slash Init Flow (`/memories init`)
+
+Use this when the skill is invoked from command text and should load global + current project context:
+
+```bash
+bash scripts/init.sh
+```
+
+Default project detection: `OPENCODE_PROJECT_DIR` basename -> git-root basename -> current-directory basename.
+
+Override examples:
+
+```bash
+bash scripts/init.sh taptik
+bash scripts/init.sh --project "taptik" --vault "MyVault" --status "valid"
+```
+
+Then read notes from `ordered_paths` sequentially via `obsidian read`.
+
 ## Global Load Fast Path
 
 ```bash
@@ -41,6 +60,12 @@ bash scripts/search.sh "[project:global] tag:#memories"
 
 ```bash
 bash scripts/search.sh "<query>"
+```
+
+`init.sh`:
+
+```bash
+bash scripts/init.sh [--project <name>] [--vault <name>] [--status <valid|invalid>]
 ```
 
 Equivalent internal command:
