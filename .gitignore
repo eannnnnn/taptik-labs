@@ -32,7 +32,5 @@ npm-debug.log*
 coverage/
 .nyc_output/
 
-# Symlinks that point outside repo (system loop fix)
-skills/browser/browser
-skills/gh/gh
-skills/memories/memories
+
+.taptik/
