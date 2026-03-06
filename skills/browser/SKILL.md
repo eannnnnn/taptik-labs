@@ -420,7 +420,9 @@ Priority (lowest to highest): `~/.agent-browser/config.json` < `./agent-browser.
 | [references/profiling.md](references/profiling.md) | Chrome DevTools profiling for performance analysis |
 | [references/proxy-support.md](references/proxy-support.md) | Proxy configuration, geo-testing, rotating proxies |
 
-## Ready-to-Use Templates
+## Example Templates (Customize First)
+
+These files are starter examples, not guaranteed end-to-end scripts. Update refs, selectors, URLs, and credentials for your target page before running.
 
 | Template | Description |
 |----------|-------------|

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Template: Form Automation Workflow
 # Purpose: Fill and submit web forms with validation
-# Usage: ./form-automation.sh <form-url>
+# Usage: ./templates/form-automation.sh <form-url>
 #
 # This template demonstrates the snapshot-interact-verify pattern:
 # 1. Navigate to form
@@ -13,9 +13,15 @@
 
 set -euo pipefail
 
+if ! command -v agent-browser >/dev/null 2>&1; then
+    echo "Error: agent-browser not found in PATH"
+    exit 1
+fi
+
 FORM_URL="${1:?Usage: $0 <form-url>}"
 
 echo "Form automation: $FORM_URL"
+echo "Template mode: update @e refs from snapshot output before submission."
 
 # Step 1: Navigate to form
 agent-browser open "$FORM_URL"

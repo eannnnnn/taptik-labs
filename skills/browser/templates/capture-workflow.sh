@@ -1,7 +1,7 @@
 #!/bin/bash
 # Template: Content Capture Workflow
 # Purpose: Extract content from web pages (text, screenshots, PDF)
-# Usage: ./capture-workflow.sh <url> [output-dir]
+# Usage: ./templates/capture-workflow.sh <url> [output-dir]
 #
 # Outputs:
 #   - page-full.png: Full page screenshot
@@ -13,10 +13,16 @@
 
 set -euo pipefail
 
+if ! command -v agent-browser >/dev/null 2>&1; then
+    echo "Error: agent-browser not found in PATH"
+    exit 1
+fi
+
 TARGET_URL="${1:?Usage: $0 <url> [output-dir]}"
 OUTPUT_DIR="${2:-.}"
 
 echo "Capturing: $TARGET_URL"
+echo "Template mode: adjust steps for site-specific behavior if needed."
 mkdir -p "$OUTPUT_DIR"
 
 # Optional: Load authentication state

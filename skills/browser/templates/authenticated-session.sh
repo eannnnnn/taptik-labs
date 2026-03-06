@@ -1,7 +1,7 @@
 #!/bin/bash
 # Template: Authenticated Session Workflow
 # Purpose: Login once, save state, reuse for subsequent runs
-# Usage: ./authenticated-session.sh <login-url> [state-file]
+# Usage: ./templates/authenticated-session.sh <login-url> [state-file]
 #
 # Environment variables:
 #   APP_USERNAME - Login username/email
@@ -19,10 +19,16 @@
 
 set -euo pipefail
 
+if ! command -v agent-browser >/dev/null 2>&1; then
+    echo "Error: agent-browser not found in PATH"
+    exit 1
+fi
+
 LOGIN_URL="${1:?Usage: $0 <login-url> [state-file]}"
 STATE_FILE="${2:-./auth-state.json}"
 
 echo "Authentication workflow: $LOGIN_URL"
+echo "Template mode: update refs and credentials for your target login page."
 
 # ================================================================
 # SAVED STATE: Skip login if valid saved state exists
