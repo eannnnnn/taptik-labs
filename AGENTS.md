@@ -52,18 +52,18 @@
 
 ## Task Management
 
-1. **Plan First**: Write plan to `<project_root>/.taptik/tasks/todo.md` with checkable items
-2. **Verify Plan**: Check in before starting implementation
-3. **Track Progress**: Mark items complete as you go
-4. **Explain Changes**: High-level summary at each step
-5. **Document Results**: Add review section to `<project_root>/.taptik/tasks/todo.md`
-6. **Capture Lessons**: Save lessons through `memories` skill after corrections
-7. **Skill-First Memory Operations**:
-   - At session start, load memory through `memories` index-first, then lazy detail fetch.
+1. **Plan First**: Start canon work with `/canon init`, then read the active project notes it returns before implementation.
+2. **Verify Plan**: Check the relevant canon feature note before starting so scope, owner state, and acceptance criteria stay aligned.
+3. **Track Progress**: Update the feature note's `Task Register` as work advances; treat it as the canonical task-state view.
+4. **Explain Changes**: Add concise progress and review updates in the canon-managed note instead of a repo-local todo file.
+5. **Document Results**: Record completion details and review-ready state in `Status History`, keeping the history append-only.
+6. **Canon Path Semantics**: Treat `canon/<project>/...` as an Obsidian/canon-managed note path, not a workspace directory or local file path.
+7. **Capture Lessons**: Save lessons through `memories` skill after corrections
+8. **Skill-First Memory Operations**:
+   - At session start, use `/memories init` to load memory index rows first, then fetch full lesson details only for relevant items.
    - On explicit memory commands (`기억해`, `외워둬`, `메모리에 저장`, `저장해`), always write via `memories`.
    - Scope mapping: global command -> global scope, project command -> project scope, unspecified -> project scope.
    - Search order in project context: project -> global.
-8. **Close Todo**: After finishing a feature, delete completed todo entries in `<project_root>/.taptik/tasks/todo.md` to optimize token usage and keep only actionable items.
 
 ## Core Principles
 
