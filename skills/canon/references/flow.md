@@ -2,13 +2,14 @@
 
 Operational guidance for autonomous agent usage with Obsidian as the source of truth for SDD work.
 
-**Related**: [../REFERENCE.md](../REFERENCE.md), [commands.md](commands.md), [search-syntax.md](search-syntax.md)
+**Related**: [../REFERENCE.md](../REFERENCE.md), [commands.md](./commands.md), [search-syntax.md](./search-syntax.md)
 
 ## Intent
 
 - Keep feature specs, task state, and completion history in `canon`.
 - Default to `canon/<project>/...` for active work.
 - Use feature Markdown files as lightweight tickets.
+- For complex work, canon is required and one active canon task note should anchor the session.
 - Keep Mermaid context maps inside feature notes.
 - Prevent silent overwrites when concurrent sessions exist.
 
@@ -21,18 +22,21 @@ obsidian read path="canon/<project>/<domain>/<feature>.md"
 obsidian create path="canon/<project>/<domain>/<feature>.md" content="<follow templates/feature-note-template.md>" overwrite
 ```
 
-## Slash Init Flow (`/canon init`)
+## Complex Work Flow
 
-Use this when the skill should load active project context and then shared/global context:
+For complex work, use one active canon task note and follow this sequence:
 
 ```bash
-bash scripts/init.sh
+obsidian read path="canon/<project>/<domain>/<feature>.md"
+obsidian create path="canon/<project>/<domain>/<feature>.md" content="<initial plan + multi-agent verification + final plan + task register>" overwrite
+obsidian read path="canon/<project>/<domain>/<feature>.md"
 ```
 
-Project auto-detection, overrides, and vault reuse follow `../SKILL.md` and `../REFERENCE.md`.
-
-Then read notes from `ordered_paths` sequentially via `obsidian read`.
-If the bootstrap returned a non-empty vault, reuse that same `vault=<name>` for every read.
+1. create an initial plan
+2. verify it against memory, canon scope, and current repo state with specialist agents as needed
+3. finalize the plan in the canon note
+4. derive execution todos from that note
+5. execute from the active canon note while updating task state and history
 
 ## Claim / Update Loop
 
@@ -44,6 +48,7 @@ If the bootstrap returned a non-empty vault, reuse that same `vault=<name>` for 
 ## Tasks Loop
 
 - Treat `Task Register` as the canonical task-state view for the feature note.
+- Treat todos outside canon as derived execution checklists, not a second source of truth.
 - Add a `CLI Tasks` checkbox section only when you want `obsidian tasks` / `obsidian task` convenience for a subset of tasks.
 - When task state changes, update the register and append a matching history entry in the same save.
 
@@ -71,6 +76,7 @@ These sections should rarely change after a feature is claimed.
 - `stale` is not time-based by default in this skill.
 - Preserve current task state during handoff.
 - Never clear ownership or reset tasks without recording why.
+- A session may own only one active canon task note at a time. Hand off or close the current note before activating another.
 
 ## Handoff Loop
 

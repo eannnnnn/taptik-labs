@@ -7,9 +7,9 @@ Use this guide when deciding whether to pass `vault=<name>` to `obsidian` comman
 - If your active Obsidian vault is already the target vault, run commands without `vault=<name>`.
 - If you need a non-active vault, pass `vault=<name>` explicitly.
 
-## Session-Start Pattern
+## Complex Work Discovery
 
-Before work, load the active project view first and optionally narrow by feature state.
+For complex work, load the active project view first and optionally narrow by feature state.
 
 ```bash
 obsidian search query="path:canon/<project>" path="canon" format=json
@@ -20,15 +20,17 @@ obsidian read path="canon/<project>/<domain>/<feature>.md"
 
 Project context should be prioritized before broader shared/global notes.
 
-For slash-style bootstrap (`/canon init`), use:
+Use one active canon task note per session. After selecting the note, keep planning, verification, task state, and execution anchored to that note.
 
-```bash
-bash scripts/init.sh
-```
+## Complex Work Flow
 
-This returns project-first paths from `canon/<project>` and then shared paths from `canon/global`.
-Project is auto-detected from `OPENCODE_PROJECT_DIR`, then git root, then current directory.
-If `init.sh` returns a non-empty `vault`, reuse that same `vault=<name>` on every follow-up `obsidian read`.
+For complex work, use this order:
+
+1. create an initial plan for the active canon note
+2. verify that plan against memory, canon scope, and current repo state with specialist agents as needed
+3. finalize the plan in the canon note
+4. derive execution todos from the canon note
+5. execute task work from the canon note while updating `Task Register` and `Status History`
 
 ## Safe Write Pattern
 
@@ -47,6 +49,8 @@ Before overwriting a feature note:
 - update ownership, timestamps, task register, and history together
 - append a history entry instead of rewriting old history lines
 - if ownership looks stale, re-read once more, append a handoff entry, then change the owner deliberately
+
+For complex work, `Task Register` remains canonical and todos outside canon should be treated as derived execution checklists only.
 
 ## Tasks CLI Integration
 

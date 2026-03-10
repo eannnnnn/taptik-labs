@@ -1,7 +1,7 @@
 ---
 name: canon
-description: Obsidian-first SDD workflow for specs, feature tickets, task state, and multi-session handoffs under `canon/<project>/...`. Use this skill to load active feature notes, manage ownership safely, and keep feature/task history in Obsidian instead of local scratch files.
-argument-hint: "init [project=<name>] [vault=<name>] [feature_state=<state>]"
+description: Obsidian-first SDD workflow for complex work, feature tickets, task state, and multi-session handoffs under `canon/<project>/...`. Use this skill to drive one active canon task note per session and keep feature/task history in Obsidian instead of local scratch files.
+argument-hint: "path=<canon/<project>/<domain>/<feature>.md> [project=<name>] [feature_state=<state>]"
 user-invokable: true
 allowed-tools:
 - "obsidian"
@@ -15,23 +15,26 @@ Use this skill for Obsidian-first SDD workflows rooted at `canon`.
 
 ## Command Contract
 
-- Empty `<user-request>` means `init`.
-- Supported init forms:
-  - `/canon init`
-  - `/canon init <project_name>`
-  - `/canon init project=<name> vault=<name> feature_state=<state>`
 - Supported write forms:
   - `/canon create path=<canon/<project>/<domain>/<feature>.md>`
   - `/canon update path=<canon/<project>/<domain>/<feature>.md>`
   - `/canon handoff path=<canon/<project>/<domain>/<feature>.md>`
 - For write forms, `path=` is required and must stay within `canon/<project>/<domain>/<feature>.md`; otherwise stop and report an invalid canon path.
 
-## Init Flow (Deterministic)
+## Discovery Flow (Deterministic)
 
-1. Run `bash scripts/init.sh [--project <name>] [--vault <name>] [--feature-state <state>]`.
-2. Read `ordered_paths` from returned JSON.
-3. Run `obsidian read path="<path>"` sequentially for each path, reusing `vault=<name>` whenever the bootstrap returned a non-empty vault.
-4. Report grouped result: project notes first, then shared/global notes.
+1. Start all discovery from `path="canon/<project>"`.
+2. Narrow with `[feature_state:<state>]` only when needed.
+3. Read the selected canon note through `obsidian read path="canon/<project>/<domain>/<feature>.md"`.
+4. Use one active canon task note per session for complex work.
+
+## Complex Work Flow (Deterministic)
+
+1. For complex work, load the relevant canon context before touching workspace code.
+2. Produce an initial plan for the active canon task note.
+3. Use multi-agent verification to check that draft plan against memory, canon scope, and current repo state.
+4. Finalize the plan in the canon note, then derive execution todos from that note.
+5. Execute task work from the active canon note while updating task state and history in Obsidian.
 
 ## Create / Update Flow (Deterministic)
 
@@ -39,7 +42,7 @@ Use this skill for Obsidian-first SDD workflows rooted at `canon`.
 2. Never use workspace `Read`, `Write`, `Edit`, `apply_patch`, or directory creation on `canon/...` note paths.
 3. For creation, use `obsidian create path="canon/<project>/<domain>/<feature>.md" content="<follow templates/feature-note-template.md>" overwrite`.
 4. For updates, run `obsidian read path="canon/<project>/<domain>/<feature>.md"` first, then rewrite with `obsidian create ... overwrite`.
-5. If `obsidian` or the canon helper scripts cannot be used, stop and report the failure instead of falling back to local file tools.
+5. If `obsidian` cannot be used for canon notes, stop and report the failure instead of falling back to local file tools.
 
 ## Claim / Handoff Flow (Deterministic)
 
@@ -48,20 +51,16 @@ Use this skill for Obsidian-first SDD workflows rooted at `canon`.
 3. For handoff, preserve current task state, append a handoff history entry, then update ownership fields deliberately in one `obsidian create ... overwrite` call.
 4. Re-read the note after each claim or handoff write to verify the change landed as expected.
 
-Project auto-detection in `init.sh`:
-
-1. `OPENCODE_PROJECT_DIR` basename (if set)
-2. Git repository root basename
-3. Current directory basename
-
 ## Core Rules
 
 - Search first, read second.
 - Start all discovery from `path="canon"` and narrow to `canon/<project>` for active work.
-- Canon notes live in Obsidian, not the workspace. Never create or edit `canon/...` with local filesystem tools; use `obsidian search/read/create` or the helper scripts.
-- If `obsidian` or helper scripts are unavailable, stop with an error. Never fall back to `mkdir`, `apply_patch`, `Write`, or other workspace file creation for canon notes.
-- For load-only flows, prefer `/canon init` or a 2-4 command sequence; expand only when actively updating a feature note.
+- Canon notes live in Obsidian, not the workspace. Never create or edit `canon/...` with local filesystem tools; use `obsidian search/read/create` against canon note paths.
+- If `obsidian` cannot be used for canon notes, stop with an error. Never fall back to `mkdir`, `apply_patch`, `Write`, or other workspace file creation for canon notes.
+- For complex work, canon is required. Trivial work does not require canon unless the user explicitly asks for canon tracking.
+- Use canon as the source of truth for task scope, ownership, and status; execution todos are a derived checklist.
 - Re-read a feature note immediately before any write.
+- A session may own only one active canon task note at a time.
 - Treat each feature note as single-writer while claimed.
 - Shared-section writes are allowed only when the note is unowned, already owned by the current `owner_session`, or explicitly being handed off.
 - Only the owning session may rewrite shared sections like overview, acceptance criteria, or Mermaid context.
@@ -82,7 +81,6 @@ Project auto-detection in `init.sh`:
 
 ## References
 
-- `scripts/init.sh` for `/canon init` bootstrap
 - `scripts/search.sh` for path-scoped search
 - `REFERENCE.md`
 - `references/commands.md`

@@ -6,31 +6,34 @@
 
 - Use `bash scripts/search.sh "<query>"` as the shorthand for `obsidian search ... path="canon"`.
 - Start with project path filters, then add `feature_state` filters only when needed.
-- For load-only work, prefer `/canon init` or a 2-4 command sequence.
+- For complex work, use canon as the source of truth and keep one active canon task note per session.
 - Treat `canon/<project>/...` as an Obsidian vault path, not a workspace directory.
 - Run commands sequentially against the same note.
 - Re-read a feature note immediately before any write.
 - Avoid capability-discovery commands during normal retrieval.
 
-## Slash-style entrypoint
+## Canon-guided discovery
 
-Use `/canon init` as the default skill-facing bootstrap. Supported slash forms follow `../SKILL.md`.
+For complex work, start from the relevant project scope and select one active canon task note.
 
-Equivalent script invocation:
-
-```bash
-bash scripts/init.sh --project "<name>" --vault "<vault>" --feature-state "in_progress"
-obsidian vault=<vault> read path="canon/<project>/<domain>/<feature>.md"
-```
-
-Project auto-detection and vault reuse follow `../SKILL.md` and `../REFERENCE.md`.
-
-## Project fast path
+Project fast path:
 
 ```bash
 bash scripts/search.sh "path:canon/<project>"
 obsidian read path="canon/<project>/<domain>/<feature>.md"
 ```
+
+If the result set is still broad, narrow with `feature_state` filters.
+
+## Planning flow
+
+```bash
+obsidian read path="canon/<project>/<domain>/<feature>.md"
+obsidian create path="canon/<project>/<domain>/<feature>.md" content="<initial plan + multi-agent verification + final plan + task register>" overwrite
+obsidian read path="canon/<project>/<domain>/<feature>.md"
+```
+
+For complex work, use this order: initial plan -> multi-agent verification against memory, canon scope, and current repo state -> finalize plan -> create execution todos -> execute.
 
 ## Filter by feature state
 
@@ -45,8 +48,6 @@ bash scripts/search.sh "[feature_state:blocked] path:canon/<project>"
 bash scripts/search.sh "path:canon/global"
 obsidian read path="canon/global/<note>.md"
 ```
-
-`bash scripts/init.sh` returns project-first `ordered_paths`; detailed bootstrap semantics live in `../SKILL.md` and `../REFERENCE.md`.
 
 ## Create or update a feature note
 
@@ -67,6 +68,8 @@ obsidian read path="canon/<project>/<domain>/<feature>.md"
 ```
 
 For claim/update writes, change ownership, timestamps, task state, and history together.
+
+Execution todos outside canon are derived checklists. `Task Register` remains the source of truth.
 
 For handoff writes, preserve task state, append a handoff history entry, then update the owner fields.
 
@@ -91,5 +94,5 @@ If you add checkbox tasks, keep them in a small optional `CLI Tasks` section so 
 ## Internal references
 
 - [install.md](install.md)
-- [search-syntax.md](search-syntax.md)
-- [flow.md](flow.md)
+- [search-syntax.md](./search-syntax.md)
+- [flow.md](./flow.md)
