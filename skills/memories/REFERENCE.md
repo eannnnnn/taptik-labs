@@ -7,9 +7,9 @@ Use this guide when selecting whether to pass `vault=<name>` to `obsidian` comma
 - If your active Obsidian vault is already the target vault, run commands without `vault=<name>`.
 - If you need a non-active vault, pass `vault=<name>` explicitly.
 
-## Session-Start Pattern
+## Read Order
 
-Before each session or development kickoff, use an index-first flow: query template properties first (`project`, `status`), then use `#memories` tag scope.
+Refer to `MEMORY.md` for the high-level memory read order. When memory context is needed, use an index-first flow: query template properties first (`project`, `status`), then use `#memories` tag scope.
 
 ```bash
 obsidian search query="[project:<name>]" path="memories" format=json
@@ -18,16 +18,7 @@ obsidian search query="tag:#memories" path="memories" format=json
 obsidian read path="memories/<selected-note>.md"
 ```
 
-In project context, prioritize `[project:<name>]` results before broader tag queries.
-
-For slash-style bootstrap (`/memories init`), use:
-
-```bash
-bash scripts/init.sh
-```
-
-This runs project + global memory discovery and returns project-first paths.
-Project is auto-detected from `OPENCODE_PROJECT_DIR`, then git root, then current directory.
+In project context, prioritize `[project:<name>]` results before broader tag queries, then read global memory after project memory.
 
 ## Safe Write Pattern
 
