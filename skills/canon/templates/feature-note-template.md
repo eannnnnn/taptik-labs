@@ -22,6 +22,11 @@ tags:
 - <criterion>
 - <criterion>
 
+## Working Plan
+- Draft plan: <initial plan>
+- Verification: <checked against memory, canon scope, and current repo state>
+- Final plan: <approved execution plan>
+
 ## Task Register
 - `TASK-001 | state=todo | owner_session=unassigned | <task description> | updated_at=<timestamp>`
 

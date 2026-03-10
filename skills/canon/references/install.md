@@ -20,7 +20,7 @@ This reference is based on the official Obsidian Templates core plugin behavior:
 
 ## Recommended Shape
 
-Keep the core canon sections from `../templates/feature-note-template.md`, especially frontmatter, `Overview`, `Acceptance Criteria`, `Task Register`, and `Status History`. Add `Mermaid Context Map` when the note needs embedded context visualization.
+Keep the core canon sections from `../templates/feature-note-template.md`, especially frontmatter, `Overview`, `Acceptance Criteria`, `Working Plan`, `Task Register`, and `Status History`. Add `Mermaid Context Map` when the note needs embedded context visualization.
 
 For a user-authored Obsidian template note, a minimal starter looks like this:
 
@@ -48,6 +48,11 @@ tags:
 ## Acceptance Criteria
 - <criterion>
 
+## Working Plan
+- Draft plan: <initial plan>
+- Verification: <checked against memory, canon scope, and current repo state>
+- Final plan: <approved execution plan>
+
 ## Task Register
 - `TASK-001 | state=todo | owner_session=unassigned | <task description> | updated_at=<timestamp>`
 
@@ -63,12 +68,13 @@ Optional additions:
 ## Usage Notes
 
 - `Task Register` is the source of truth for canon task state.
+- For complex work, one active canon task note should anchor the session.
 - `{{title}}` resolves to the current note title when the template is inserted.
 - `{{date}}` and `{{time}}` can replace `<timestamp>` if the user wants generated values.
 - If the user wants automatic new-note-from-template behavior, point them to `Daily notes` or `Unique note creator` rather than Templates alone.
 
 ## Related References
 
-- [commands.md](commands.md)
-- [flow.md](flow.md)
-- [search-syntax.md](search-syntax.md)
+- [commands.md](./commands.md)
+- [flow.md](./flow.md)
+- [search-syntax.md](./search-syntax.md)
