@@ -2,14 +2,14 @@
 
 Operational guidance for autonomous agent usage with minimal templates.
 
-**Related**: [../REFERENCE.md](../REFERENCE.md), [commands.md](commands.md), [search-syntax.md](search-syntax.md)
+**Related**: [../REFERENCE.md](../REFERENCE.md), [commands.md](./commands.md), [search-syntax.md](./search-syntax.md)
 
 ## Intent
 
 - Keep template shells minimal.
 - Let agents drive with `bash scripts/search.sh` for discovery and direct `obsidian read/create` for selected note actions.
-- Before each session or development kickoff, use an index-first flow (template properties first, then `#memories` scope tag).
-- In project context, prioritize `[project:<name>]` results, then load selected notes.
+- When memory context is needed, refer to `MEMORY.md` for read order and then use an index-first flow (template properties first, then `#memories` scope tag).
+- In project context, read project memory first, then read global memory, and broaden queries only after that ordered pass.
 - Use `templates/memory-note-template.md` for create/update structure.
 
 ## Autonomous Loop (Fast Path)
@@ -22,24 +22,16 @@ obsidian read path="memories/<selected-note>.md"
 obsidian create path="memories/<date>-<slug>.md" content="<follow templates/memory-note-template.md>" overwrite
 ```
 
-## Slash Init Flow (`/memories init`)
+## Project-First Read Order
 
-Use this when the skill is invoked from command text and should load global + current project context:
-
-```bash
-bash scripts/init.sh
-```
-
-Default project detection: `OPENCODE_PROJECT_DIR` basename -> git-root basename -> current-directory basename.
-
-Override examples:
+Read project memory first, then read global memory:
 
 ```bash
-bash scripts/init.sh taptik
-bash scripts/init.sh --project "taptik" --vault "MyVault" --status "valid"
+bash scripts/search.sh "[project:<name>]"
+obsidian read path="memories/<selected-note>.md"
+bash scripts/search.sh "[project:global] [status:valid] tag:#memories"
+obsidian read path="memories/<selected-note>.md"
 ```
-
-Then read notes from `ordered_paths` sequentially via `obsidian read`.
 
 ## Global Load Fast Path
 
@@ -60,12 +52,6 @@ bash scripts/search.sh "[project:global] tag:#memories"
 
 ```bash
 bash scripts/search.sh "<query>"
-```
-
-`init.sh`:
-
-```bash
-bash scripts/init.sh [--project <name>] [--vault <name>] [--status <valid|invalid>]
 ```
 
 Equivalent internal command:

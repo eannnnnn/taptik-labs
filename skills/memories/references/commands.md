@@ -10,27 +10,25 @@
 - For load-only tasks, keep command budget to 2-4 commands.
 - Avoid `obsidian --help` and `obsidian vaults` during normal retrieval.
 
-## Slash-style entrypoint
+## Memory-guided discovery
 
-Use `/memories init` as the default skill-facing bootstrap.
+Refer to `MEMORY.md` for read order.
 
-Supported forms:
-
-- `/memories init`
-- `/memories init <project_name>`
-- `/memories init project=<name> vault=<vault> status=<valid|invalid>`
-
-Equivalent script invocation:
+Project-first discovery:
 
 ```bash
-bash scripts/init.sh --project "<name>" --vault "<vault>" --status "valid"
+bash scripts/search.sh "[project:<name>]"
+obsidian read path="memories/<selected-note>.md"
 ```
 
-If no project is passed, `init.sh` auto-detects project as:
+Global follow-up:
 
-1. `basename "$OPENCODE_PROJECT_DIR"` (if set)
-2. `basename "$(git rev-parse --show-toplevel)"`
-3. `basename "$PWD"`
+```bash
+bash scripts/search.sh "[project:global] [status:valid] tag:#memories"
+obsidian read path="memories/<selected-note>.md"
+```
+
+If retrieval is still broad, narrow with `[status:valid]`, `[status:invalid]`, or a tag query.
 
 ## Global fast path
 
@@ -39,7 +37,7 @@ bash scripts/search.sh "[project:global] [status:valid] tag:#memories"
 obsidian read path="memories/<selected-note>.md"
 ```
 
-## Session-start discovery
+## Broader discovery
 
 ```bash
 bash scripts/search.sh "[project:<name>]"
@@ -47,18 +45,6 @@ bash scripts/search.sh "[status:valid]"
 bash scripts/search.sh "tag:#memories"
 obsidian read path="memories/<selected-note>.md"
 ```
-
-## Init bootstrap script
-
-```bash
-bash scripts/init.sh
-```
-
-Output is JSON with:
-
-- `project_paths`
-- `global_paths`
-- `ordered_paths` (project-first then global, deduped)
 
 ## Save patterns
 
@@ -90,5 +76,5 @@ For non-default environment overrides, follow `../REFERENCE.md`.
 
 ## Internal references
 
-- [search-syntax.md](search-syntax.md)
-- [flow.md](flow.md)
+- [search-syntax.md](./search-syntax.md)
+- [flow.md](./flow.md)
